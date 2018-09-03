@@ -25,7 +25,7 @@ end
 
 Constants = 
 {
-    MAX_PLAYERS = 1,
+    MAX_PLAYERS = 2,
     INPUT_DEFINITIONS = { LEFT = 0, RIGHT = 1, UP = 2, DOWN = 3, BUTTON_O = 4, BUTTON_X = 5 },
     SCREEN_MAX = { X = 120, Y = 120 }
 }
@@ -36,14 +36,18 @@ Constants = protect(Constants);
 
 -- Initialise Core Structures
 
-FirstPlayer = { X = 20, Y = 20, Sprite = 0, Speed = 3 };
+Players = 
+{
+    { X = 20, Y = 20, Speed = 3 },
+    {  X = 60, Y = 20, Speed = 3 }
+};
 
 -- END Initialise Core Structures
 
 -- Initialisation
 
 function _init()
-    
+
 end
 
 -- END Initialisation
@@ -53,24 +57,31 @@ function _update()
 end
 
 function updateMovement()
-    if btn( Constants.INPUT_DEFINITIONS.LEFT ) then
-        FirstPlayer.X -= FirstPlayer.Speed;
-    end
 
-    if btn( Constants.INPUT_DEFINITIONS.RIGHT ) then
-        FirstPlayer.X += FirstPlayer.Speed;
-    end
+    local ButtonCount = #Constants.INPUT_DEFINITIONS;
+    local InputCount = Constants.MAX_PLAYERS * ButtonCount;
 
-    if btn( Constants.INPUT_DEFINITIONS.UP ) then
-        FirstPlayer.Y -= FirstPlayer.Speed;
-    end
+    for PlayerIndex = 1, Constants.MAX_PLAYERS do
+        local PadIndex = PlayerIndex - 1;
+        if btn( Constants.INPUT_DEFINITIONS.LEFT, PadIndex ) then
+            Players[PlayerIndex].X -= Players[PlayerIndex].Speed;
+        end
 
-    if btn( Constants.INPUT_DEFINITIONS.DOWN ) then
-        FirstPlayer.Y += FirstPlayer.Speed;
-    end
+        if btn( Constants.INPUT_DEFINITIONS.RIGHT, PadIndex ) then
+            Players[PlayerIndex].X += Players[PlayerIndex].Speed;
+        end
 
-    FirstPlayer.X = clampValue( FirstPlayer.X, 0,  Constants.SCREEN_MAX.X );
-    FirstPlayer.Y = clampValue( FirstPlayer.Y, 0, Constants.SCREEN_MAX.Y );
+        if btn( Constants.INPUT_DEFINITIONS.UP, PadIndex ) then
+            Players[PlayerIndex].Y -= Players[PlayerIndex].Speed;
+        end
+
+        if btn( Constants.INPUT_DEFINITIONS.DOWN, PadIndex ) then
+            Players[PlayerIndex].Y += Players[PlayerIndex].Speed;
+        end
+
+        Players[PlayerIndex].X = clampValue( Players[PlayerIndex].X, 0,  Constants.SCREEN_MAX.X );
+        Players[PlayerIndex].Y = clampValue( Players[PlayerIndex].Y, 0, Constants.SCREEN_MAX.Y );
+    end
 end
 
 function clampValue( value, min, max )
@@ -85,6 +96,15 @@ end
 
 function _draw()
     cls();
-    spr( FirstPlayer.Sprite, FirstPlayer.X, FirstPlayer.Y );
+    for i = 1, Constants.MAX_PLAYERS do
+        spr( i - 1, Players[i].X, Players[i].Y );
+    end
 end
 
+__gfx__
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00700700007007000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00077000000770000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00077000000770000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00700700007007000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
