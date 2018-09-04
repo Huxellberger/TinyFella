@@ -42,7 +42,7 @@ constants = protect(constants);
 function makeplayer( inx, insprite )
     return 
     { 
-        x = inx, y = 20, movementdata = makemovementdata(), sprite = insprite, jumping = false  
+        x = inx, y = 20, movementdata = makemovementdata(), sprite = insprite  
     };
 end
 
@@ -90,15 +90,9 @@ function updatemovement()
     
         players[playerindex].y -= players[playerindex].movementdata.currentvelocityy;
         players[playerindex].movementdata.currentvelocityy += constants.gravity;
-        
         if players[playerindex].y >= lineofplay then
             players[playerindex].y = lineofplay;
             players[playerindex].movementdata.currentvelocityy = 0;
-            
-            if players[playerindex].jumping then    
-                sfx( 1 );
-                players[playerindex].jumping = false;
-            end
         end
 
         local padindex = playerindex - 1;
@@ -113,8 +107,6 @@ function updatemovement()
         if btn( constants.input_definitions.up, padindex ) then
             if canjump( players[playerindex] ) then
                 players[playerindex].movementdata.currentvelocityy = players[playerindex].movementdata.startingjumpspeed;
-                players[playerindex].jumping = true;
-                sfx( 0 );
             end
             -- players[playerindex].y -= players[playerindex].movementdata.defaultmovespeed;
         end
@@ -171,5 +163,4 @@ __gfx__
 00077000000770000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00700700007007000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 __sfx__
-000300001335013350133501335013350263502635025350253500000032350313500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-000500000565005650056500565005650053500535004350013500135005700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+010300001335013350133501335013350263502635025350253500000032350313500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
